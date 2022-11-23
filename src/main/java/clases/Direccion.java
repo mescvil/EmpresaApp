@@ -3,7 +3,6 @@ package clases;
 public class Direccion implements Comparable<Direccion> {
 
     // ----------------------------- ATRIBUTOS -----------------------------
-
     private String nombre_via;
     private String numero;
     private String piso;
@@ -11,7 +10,6 @@ public class Direccion implements Comparable<Direccion> {
     private String localidad;
 
     // ----------------------------- CONSTRUCTORES -----------------------------
-
     public Direccion(String nombre_via, String codigo_postal, String localidad) {
         setNombre_via(nombre_via);
         setCodigo_postal(codigo_postal);
@@ -27,7 +25,6 @@ public class Direccion implements Comparable<Direccion> {
     }
 
     // ----------------------------- METODOS -----------------------------
-
     @Override
     public String toString() {
         return String.format("%s %s %s %s %s", getNombre_via(), getNumero(), getPiso(), getCodigo_postal(),
@@ -41,14 +38,14 @@ public class Direccion implements Comparable<Direccion> {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Direccion))
+        if (!(obj instanceof Direccion)) {
             return false;
+        }
 
         return toString().equals(obj.toString());
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------
-
     public String getNombre_via() {
         return nombre_via;
     }

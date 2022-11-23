@@ -2,6 +2,12 @@
  */
 package interfaz;
 
+import accesoDatos.Conexion;
+import accesoDatos.EmpleadosDB;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Escoz
@@ -12,7 +18,26 @@ public class VistaPrincipal extends javax.swing.JFrame {
      * Creates new form VistaPrincipal
      */
     public VistaPrincipal() {
+        abreConexionDB();
+        leeAdministrativos();
+
         initComponents();
+    }
+
+    private void abreConexionDB() {
+        try {
+            Conexion.abreConexion();
+        } catch (SQLException ex) {
+            Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void leeAdministrativos() {
+        try {
+            EmpleadosDB.leeAdministrativos();
+        } catch (SQLException ex) {
+            Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
