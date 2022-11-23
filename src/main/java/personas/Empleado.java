@@ -15,14 +15,14 @@ public abstract class Empleado extends Persona {
 
     // ----------------------------- CONSTRUCTORES -----------------------------
 
-    public Empleado(String dni, String nombre, String apellido_1, Oficina oficina, float sueldo)
+    public Empleado(String dni, String nombre, String apellido_1, Oficina oficina)
             throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1);
         setOficina(oficina);
 
     }
 
-    public Empleado(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina, float sueldo)
+    public Empleado(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina)
             throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1, apellido_2);
         setOficina(oficina);
@@ -30,14 +30,14 @@ public abstract class Empleado extends Persona {
     }
 
     public Empleado(String dni, String nombre, String apellido_1, String apellido_2, GregorianCalendar fecha_nacimiento,
-                    Direccion direccion, Oficina oficina, float sueldo) throws LongitudNoValidaException, DniNoValidoException {
+                    Direccion direccion, Oficina oficina) throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion);
         setOficina(oficina);
 
     }
 
     public Empleado(String dni, String nombre, String apellido_1, String apellido_2, GregorianCalendar fecha_nacimiento,
-                    Oficina oficina, float sueldo) throws LongitudNoValidaException, DniNoValidoException {
+                    Oficina oficina) throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento);
         setOficina(oficina);
 

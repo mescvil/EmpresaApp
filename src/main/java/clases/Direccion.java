@@ -24,6 +24,22 @@ public class Direccion implements Comparable<Direccion> {
         setLocalidad(direccion.getLocalidad());
     }
 
+    /**
+     * Construye una dirección dada una en formato CSV
+     *
+     * @param direccionCSV direccion en formato CSV <br>
+     * Por ejemplo: calle mayor,1,N/A,23000,jaen
+     */
+    public Direccion(String direccionCSV) {
+        String[] partes = direccionCSV.split(",");
+
+        setNombre_via(partes[0]);
+        setNumero(partes[1]);
+        setPiso(partes[2]);
+        setCodigo_postal(partes[4]);
+        setLocalidad(partes[3]);
+    }
+
     // ----------------------------- METODOS -----------------------------
     @Override
     public String toString() {

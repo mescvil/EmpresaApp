@@ -9,59 +9,55 @@ import excepciones.LongitudNoValidaException;
 
 public class Analistas extends Tecnicos {
 
-	// ----------------------------- ATRIBUTOS -----------------------------
+    // ----------------------------- ATRIBUTOS -----------------------------
+    private String titulacion;
 
-	private String titulacion;
+    // ----------------------------- CONSTRUCTORES -----------------------------
+    public Analistas(String dni, String nombre, String apellido_1, Oficina oficina, String titulacion)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, oficina);
+        setTitulacion(titulacion);
+    }
 
-	// ----------------------------- CONSTRUCTORES -----------------------------
+    public Analistas(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina,
+            String titulacion) throws LongitudNoValidaException, DniNoValidoException {
 
-	public Analistas(String dni, String nombre, String apellido_1, Oficina oficina, float sueldo, String titulacion)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, oficina, sueldo);
-		setTitulacion(titulacion);
-	}
+        super(dni, nombre, apellido_1, apellido_2, oficina);
+        setTitulacion(titulacion);
+    }
 
-	public Analistas(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina, float sueldo,
-			String titulacion) throws LongitudNoValidaException, DniNoValidoException {
+    public Analistas(String dni, String nombre, String apellido_1, String apellido_2,
+            GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina, String titulacion)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina);
+        setTitulacion(titulacion);
+    }
 
-		super(dni, nombre, apellido_1, apellido_2, oficina, sueldo);
-		setTitulacion(titulacion);
-	}
+    public Analistas(String dni, String nombre, String apellido_1, String apellido_2,
+            GregorianCalendar fecha_nacimiento, Oficina oficina, String titulacion)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina);
+        setTitulacion(titulacion);
+    }
 
-	public Analistas(String dni, String nombre, String apellido_1, String apellido_2,
-			GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina, float sueldo, String titulacion)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina, sueldo);
-		setTitulacion(titulacion);
-	}
+    // ----------------------------- METODOS -----------------------------
+    @Override
+    public String toString() {
+        return String.format("%s %s", super.toString(), titulacion);
+    }
 
-	public Analistas(String dni, String nombre, String apellido_1, String apellido_2,
-			GregorianCalendar fecha_nacimiento, Oficina oficina, float sueldo, String titulacion)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina, sueldo);
-		setTitulacion(titulacion);
-	}
+    @Override
+    public float calculaSueldo() {
+        return super.calculaSueldo();
+    }
 
-	// ----------------------------- METODOS -----------------------------
+    // ----------------------------- GETTERS & SETTERS -----------------------------
+    public String getTitulacion() {
+        return titulacion;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("%s %s", super.toString(), titulacion);
-	}
-
-	@Override
-	public float calculaSueldo() {
-		return super.calculaSueldo();
-	}
-
-	// ----------------------------- GETTERS & SETTERS -----------------------------
-
-	public String getTitulacion() {
-		return titulacion;
-	}
-
-	public void setTitulacion(String titulacion) {
-		this.titulacion = titulacion;
-	}
+    public void setTitulacion(String titulacion) {
+        this.titulacion = titulacion;
+    }
 
 }

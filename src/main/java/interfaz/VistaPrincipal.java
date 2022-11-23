@@ -5,8 +5,10 @@ package interfaz;
 import accesoDatos.Conexion;
 import accesoDatos.EmpleadosDB;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import personas.Administrativo;
 
 /**
  *
@@ -34,7 +36,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     private void leeAdministrativos() {
         try {
-            EmpleadosDB.leeAdministrativos();
+            ArrayList<Administrativo> lista = EmpleadosDB.leeAdministrativos();
+
+            for (Administrativo administrativo : lista) {
+                System.out.println(administrativo);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }

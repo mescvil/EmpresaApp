@@ -9,44 +9,40 @@ import excepciones.LongitudNoValidaException;
 
 public abstract class NoTecnicos extends Empleado {
 
-	// ----------------------------- ATRIBUTOS -----------------------------
+    // ----------------------------- ATRIBUTOS -----------------------------
+    // ----------------------------- CONSTRUCTORES -----------------------------
+    public NoTecnicos(String dni, String nombre, String apellido_1, Oficina oficina)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, oficina);
+    }
 
-	// ----------------------------- CONSTRUCTORES -----------------------------
+    public NoTecnicos(String dni, String nombre, String apellido_1, String apellido_2,
+            GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina);
+    }
 
-	public NoTecnicos(String dni, String nombre, String apellido_1, Oficina oficina, float sueldo)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, oficina, sueldo);
-	}
+    public NoTecnicos(String dni, String nombre, String apellido_1, String apellido_2,
+            GregorianCalendar fecha_nacimiento, Oficina oficina)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina);
+    }
 
-	public NoTecnicos(String dni, String nombre, String apellido_1, String apellido_2,
-			GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina, float sueldo)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina, sueldo);
-	}
+    public NoTecnicos(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, oficina);
+    }
 
-	public NoTecnicos(String dni, String nombre, String apellido_1, String apellido_2,
-			GregorianCalendar fecha_nacimiento, Oficina oficina, float sueldo)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina, sueldo);
-	}
+    // ----------------------------- METODOS -----------------------------
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
-	public NoTecnicos(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina, float sueldo)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, oficina, sueldo);
-	}
+    @Override
+    public float calculaSueldo() {
+        return super.calculaSueldo();
+    }
 
-	// ----------------------------- METODOS -----------------------------
-
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	@Override
-	public float calculaSueldo() {
-		return super.calculaSueldo();
-	}
-
-	// ----------------------------- GETTERS & SETTERS -----------------------------
-
+    // ----------------------------- GETTERS & SETTERS -----------------------------
 }

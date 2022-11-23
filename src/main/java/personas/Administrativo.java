@@ -10,58 +10,54 @@ import excepciones.LongitudNoValidaException;
 
 public class Administrativo extends NoTecnicos {
 
-	// ----------------------------- ATRIBUTOS -----------------------------
+    // ----------------------------- ATRIBUTOS -----------------------------
+    private Nivel nivel_ofimatica;
 
-	private Nivel nivel_ofimatica;
+    // ----------------------------- ATRIBUTOS -----------------------------
+    public Administrativo(String dni, String nombre, String apellido_1, Oficina oficina, Nivel nivel)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, oficina);
+        setNivelOfimatica(nivel);
+    }
 
-	// ----------------------------- ATRIBUTOS -----------------------------
+    public Administrativo(String dni, String nombre, String apellido_1, String apellido_2,
+            GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina, Nivel nivel)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina);
+        setNivelOfimatica(nivel);
+    }
 
-	public Administrativo(String dni, String nombre, String apellido_1, Oficina oficina, float sueldo, Nivel nivel)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, oficina, sueldo);
-		setNivelOfimatica(nivel);
-	}
+    public Administrativo(String dni, String nombre, String apellido_1, String apellido_2,
+            GregorianCalendar fecha_nacimiento, Oficina oficina, Nivel nivel)
+            throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina);
+        setNivelOfimatica(nivel);
+    }
 
-	public Administrativo(String dni, String nombre, String apellido_1, String apellido_2,
-			GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina, float sueldo, Nivel nivel)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina, sueldo);
-		setNivelOfimatica(nivel);
-	}
+    public Administrativo(String dni, String nombre, String apellido_1, String apellido_2,
+            Oficina oficina, Nivel nivel) throws LongitudNoValidaException, DniNoValidoException {
+        super(dni, nombre, apellido_1, apellido_2, oficina);
+        setNivelOfimatica(nivel);
+    }
 
-	public Administrativo(String dni, String nombre, String apellido_1, String apellido_2,
-			GregorianCalendar fecha_nacimiento, Oficina oficina, float sueldo, Nivel nivel)
-			throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina, sueldo);
-		setNivelOfimatica(nivel);
-	}
+    // ----------------------------- METODOS -----------------------------
+    @Override
+    public String toString() {
+        return String.format("%s %s", super.toString(), nivel_ofimatica.toString());
+    }
 
-	public Administrativo(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina,
-			float sueldo, Nivel nivel) throws LongitudNoValidaException, DniNoValidoException {
-		super(dni, nombre, apellido_1, apellido_2, oficina, sueldo);
-		setNivelOfimatica(nivel);
-	}
+    @Override
+    public float calculaSueldo() {
+        return super.calculaSueldo();
+    }
 
-	// ----------------------------- METODOS -----------------------------
+    // ----------------------------- GETTERS & SETTERS -----------------------------
+    public Nivel getNivelOfimatica() {
+        return nivel_ofimatica;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("%s %s", super.toString(), nivel_ofimatica.toString());
-	}
-
-	@Override
-	public float calculaSueldo() {
-		return super.calculaSueldo();
-	}
-
-	// ----------------------------- GETTERS & SETTERS -----------------------------
-
-	public Nivel getNivelOfimatica() {
-		return nivel_ofimatica;
-	}
-
-	public void setNivelOfimatica(Nivel nivel) {
-		this.nivel_ofimatica = nivel;
-	}
+    public void setNivelOfimatica(Nivel nivel) {
+        this.nivel_ofimatica = nivel;
+    }
 
 }
