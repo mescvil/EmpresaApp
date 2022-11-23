@@ -33,6 +33,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         combo_empleado = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox<>();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         boton_buscar = new javax.swing.JButton();
         boton_limpiar = new javax.swing.JButton();
         panel_botones = new javax.swing.JPanel();
@@ -42,6 +43,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_salir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("EmpresaApp 1.0");
         setPreferredSize(new java.awt.Dimension(900, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -118,15 +120,27 @@ public class VistaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         panel_filtros.add(jComboBox3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.2;
+        panel_filtros.add(filler3, gridBagConstraints);
 
+        boton_buscar.setBackground(new java.awt.Color(51, 153, 255));
+        boton_buscar.setForeground(new java.awt.Color(255, 255, 255));
         boton_buscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panel_filtros.add(boton_buscar, gridBagConstraints);
 
         boton_limpiar.setText("Limpiar");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.weighty = 0.1;
         panel_filtros.add(boton_limpiar, gridBagConstraints);
 
@@ -149,6 +163,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         panel_botones.add(boton_imprimir);
         panel_botones.add(filler2);
 
+        boton_salir.setBackground(new java.awt.Color(255, 102, 102));
+        boton_salir.setForeground(new java.awt.Color(255, 255, 255));
         boton_salir.setText("Salir");
         boton_salir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         panel_botones.add(boton_salir);
@@ -174,6 +190,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> combo_oficina;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
