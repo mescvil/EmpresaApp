@@ -3,13 +3,11 @@ package clases;
 public class Oficina implements Comparable<Oficina> {
 
     // ----------------------------- ATRIBUTOS -----------------------------
-
     private String nombre;
     private String codigo;
     private Direccion direccion;
 
     // ----------------------------- CONSTRUCTORES -----------------------------
-
     public Oficina(String nombre, String codigo, Direccion direccion) {
         setNombre(nombre);
         setCodigo(codigo);
@@ -23,10 +21,9 @@ public class Oficina implements Comparable<Oficina> {
     }
 
     // ----------------------------- METODOS -----------------------------
-
     @Override
     public String toString() {
-        return String.format("%s, %s %s", getCodigo(), getNombre(), getDireccion());
+        return String.format("%s - %s", getCodigo(), getNombre());
     }
 
     @Override
@@ -36,14 +33,14 @@ public class Oficina implements Comparable<Oficina> {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Oficina))
+        if (!(obj instanceof Oficina)) {
             return false;
+        }
 
         return toString().equals(obj.toString());
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------
-
     public String getNombre() {
         return nombre;
     }

@@ -2,8 +2,8 @@
  */
 package interfaz;
 
-import accesoDatos.Conexion;
-import accesoDatos.EmpleadosDB;
+import accesoDatos.*;
+import clases.Oficina;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,6 +21,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     public VistaPrincipal() {
         abreConexionDB();
+        cargaComboOficinas();
         leeAdministrativos();
 
         initComponents();
@@ -32,6 +33,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void cargaComboOficinas() {
+        ArrayList<Oficina> oficinas = OficinasDB.leeOficinas();
     }
 
     private void leeAdministrativos() {
@@ -218,7 +223,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton boton_limpiar;
     private javax.swing.JButton boton_salir;
     private javax.swing.JComboBox<String> combo_empleado;
-    private javax.swing.JComboBox<String> combo_oficina;
+    private javax.swing.JComboBox<Object> combo_oficina;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
