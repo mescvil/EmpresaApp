@@ -18,6 +18,7 @@ import personas.Administrativo;
 import personas.Analista;
 import personas.Empleado;
 import personas.Programador;
+import personas.Vendedor;
 
 public class EmpleadosDB {
 
@@ -29,6 +30,9 @@ public class EmpleadosDB {
 
     private static final String SELECT_ANALISTAS = "select * from empleados join "
             + "analistas on empleados.dni = analistas.dni";
+
+    private static final String SELECT_VENDEDORES = "select * from empleados join "
+            + "vendedores on empleados.dni = vendedores.dni";
 
     /**
      * Lee todos los empleados presentes en la BBDD
@@ -42,6 +46,7 @@ public class EmpleadosDB {
         lista_empleados.addAll(leeAdministrativos());
         lista_empleados.addAll(leeProgramadores());
         lista_empleados.addAll(leeAnalistas());
+        lista_empleados.addAll(leeVendedores());
 
         return lista_empleados;
     }
@@ -157,6 +162,45 @@ public class EmpleadosDB {
 
                 lista_empleados.add(new Administrativo(dni, nombre, apellido_1, apellido_2, fecha_gregorian, direccion,
                         oficina, nivel));
+
+            }
+        } catch (ParseException ex) {
+            throw new CargaDatosException("Error al crear la fecha de nacimiento");
+        } catch (LongitudNoValidaException | DniNoValidoException | SQLException ex) {
+            throw new CargaDatosException("Error al leer y crear un empleado: " + ex.getMessage());
+        }
+
+        return lista_empleados;
+    }
+
+    /**
+     * Lee todos los vendedores presentes en la BBDD
+     *
+     * @return ArrayList con todos los vendedores
+     * @throws CargaDatosException En caso de error en la lectura de los vendedores
+     */
+    public static ArrayList<Vendedor> leeVendedores() throws CargaDatosException {
+        ArrayList<Vendedor> lista_empleados = new ArrayList<>();
+
+        try {
+            Statement statement = conexion.createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_VENDEDORES);
+
+            while (resultSet.next()) {
+
+                String dni = resultSet.getString("dni");
+                String nombre = resultSet.getString("nombre");
+                String apellido_1 = resultSet.getString("apellido_1");
+                String apellido_2 = resultSet.getString("apellido_2");
+                String fecha_nacimiento = resultSet.getString("fecha_nacimiento");
+                GregorianCalendar fecha_gregorian = stringToGregorianCalendar(fecha_nacimiento);
+                Direccion direccion = new Direccion(resultSet.getString("direccion"));
+                Oficina oficina = OficinasDB.leeOficina(resultSet.getString("cod_oficina"));
+
+                int zona = resultSet.getInt("zona");
+
+                lista_empleados.add(new Vendedor(dni, nombre, apellido_1, apellido_2, fecha_gregorian, direccion,
+                        oficina, zona));
 
             }
         } catch (ParseException ex) {
