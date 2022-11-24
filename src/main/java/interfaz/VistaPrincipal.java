@@ -16,18 +16,20 @@ import personas.Empleado;
  * @author Escoz
  */
 public class VistaPrincipal extends javax.swing.JFrame {
-    
+
     private DefaultComboBoxModel<Object> modeloCombo_oficinas;
     private DefaultComboBoxModel<String> modeloCombo_empleados;
+
+    private ModeloTablaEmpleados modeloTablaEmpleados;
 
     /**
      * Creates new form VistaPrincipal
      */
     public VistaPrincipal() {
         abreConexionDB();
-        
+
         initComponents();
-        
+
         cargaComboOficinas();
         cargaEmpleadosTabla();
     }
@@ -51,17 +53,21 @@ public class VistaPrincipal extends javax.swing.JFrame {
         try {
             ArrayList<Empleado> lisa_empleados = EmpleadosDB.leeEmpleados();
             ArrayList<String> tipos_empleados = new ArrayList<>();
-            
+
+            /* Ineficiente pero funcional */
             for (Empleado empleado : lisa_empleados) {
                 String tipo = empleado.getClass().getSimpleName();
-                
+
                 if (!tipos_empleados.contains(tipo)) {
                     tipos_empleados.add(tipo);
                 }
             }
-            
+
+            /* Añadimos todos los empleados */
+            modeloTablaEmpleados.addEmpleados(lisa_empleados);
+
             cargaComboEmpelados(tipos_empleados);
-            
+
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Empleados");
         }
@@ -89,7 +95,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
             modeloCombo_oficinas.removeAllElements();
             modeloCombo_oficinas.addElement("- Sin selección -");
             modeloCombo_oficinas.addAll(oficinas);
-            
+
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Oficinas");
         }
@@ -105,7 +111,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla_empleados = new javax.swing.JTable();
         panel_filtros = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         modeloCombo_oficinas = new DefaultComboBoxModel<>();
@@ -125,22 +131,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_salir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("EmpresaApp 1.0");
+        setTitle("EmpresaApp");
         setPreferredSize(new java.awt.Dimension(900, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tabla_empleados.setModel(modeloTablaEmpleados = new ModeloTablaEmpleados());
+        jScrollPane1.setViewportView(tabla_empleados);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -287,8 +283,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel panel_botones;
     private javax.swing.JPanel panel_filtros;
+    private javax.swing.JTable tabla_empleados;
     // End of variables declaration//GEN-END:variables
 }

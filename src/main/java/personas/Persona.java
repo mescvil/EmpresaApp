@@ -56,6 +56,10 @@ public abstract class Persona implements Comparable<Persona> {
     }
 
     // ----------------------------- METODOS -----------------------------
+    public String getNombreCompleto() {
+        return String.format("%s, %s %s", getNombre(), getApellido_1(), getApellido_2());
+    }
+
     @Override
     public String toString() {
         return String.format("%s %s %s %s %s", getNombre(), getApellido_1(), getApellido_2(), getFecha_nacimiento(),
