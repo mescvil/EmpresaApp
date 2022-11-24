@@ -2,52 +2,96 @@
  */
 package interfaz;
 
+import static interfaz.Dialogs.creaDialogError;
 import accesoDatos.*;
 import clases.Oficina;
+import excepciones.CargaDatosException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import personas.Administrativo;
+import javax.swing.DefaultComboBoxModel;
+import personas.Empleado;
 
 /**
- *
  * @author Escoz
  */
 public class VistaPrincipal extends javax.swing.JFrame {
+    
+    private DefaultComboBoxModel<Object> modeloCombo_oficinas;
+    private DefaultComboBoxModel<String> modeloCombo_empleados;
 
     /**
      * Creates new form VistaPrincipal
      */
     public VistaPrincipal() {
         abreConexionDB();
-        cargaComboOficinas();
-        leeAdministrativos();
-
+        
         initComponents();
+        
+        cargaComboOficinas();
+        cargaEmpleadosTabla();
     }
 
+    /**
+     * Abre la conexion con la BBDD, en caso de error muestra un mensaje y para la ejecución.
+     */
     private void abreConexionDB() {
         try {
             Conexion.abreConexion();
         } catch (SQLException ex) {
-            Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            creaDialogError(this, "No es posible acceder a la BBDD", "Conexión");
+            System.exit(1);
         }
     }
 
-    private void cargaComboOficinas() {
-        ArrayList<Oficina> oficinas = OficinasDB.leeOficinas();
+    /**
+     * Carga todos los empleados en la tabla principal
+     */
+    private void cargaEmpleadosTabla() {
+        try {
+            ArrayList<Empleado> lisa_empleados = EmpleadosDB.leeEmpleados();
+            ArrayList<String> tipos_empleados = new ArrayList<>();
+            
+            for (Empleado empleado : lisa_empleados) {
+                String tipo = empleado.getClass().getSimpleName();
+                
+                if (!tipos_empleados.contains(tipo)) {
+                    tipos_empleados.add(tipo);
+                }
+            }
+            
+            cargaComboEmpelados(tipos_empleados);
+            
+        } catch (CargaDatosException ex) {
+            creaDialogError(this, ex.getMessage(), "Empleados");
+        }
     }
 
-    private void leeAdministrativos() {
-        try {
-            ArrayList<Administrativo> lista = EmpleadosDB.leeAdministrativos();
+    /**
+     * Carga los tipos de empleados disponibles en el combo box
+     *
+     * @param tipos_empleados Lista con los tipos de empleados
+     */
+    private void cargaComboEmpelados(ArrayList<String> tipos_empleados) {
+        modeloCombo_empleados.removeAllElements();
+        modeloCombo_empleados.addElement("- Sin selección -");
+        for (String tipo_empleado : tipos_empleados) {
+            modeloCombo_empleados.addElement(tipo_empleado);
+        }
+    }
 
-            for (Administrativo administrativo : lista) {
-                System.out.println(administrativo);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+    /**
+     * Carga las oficinas de la BBDD, en caso de no poder genera un mensaje de error
+     */
+    private void cargaComboOficinas() {
+        try {
+            ArrayList<Oficina> oficinas = OficinasDB.leeOficinas();
+            modeloCombo_oficinas.removeAllElements();
+            modeloCombo_oficinas.addElement("- Sin selección -");
+            modeloCombo_oficinas.addAll(oficinas);
+            
+        } catch (CargaDatosException ex) {
+            creaDialogError(this, ex.getMessage(), "Oficinas");
         }
     }
 
@@ -64,8 +108,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         panel_filtros = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        modeloCombo_oficinas = new DefaultComboBoxModel<>();
         combo_oficina = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
+        modeloCombo_empleados = new DefaultComboBoxModel<>();
         combo_empleado = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox<>();
@@ -115,7 +161,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panel_filtros.add(jLabel1, gridBagConstraints);
 
-        combo_oficina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Sin selección -" }));
+        combo_oficina.setModel(modeloCombo_oficinas);
         combo_oficina.setPreferredSize(new java.awt.Dimension(120, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -132,7 +178,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panel_filtros.add(jLabel2, gridBagConstraints);
 
-        combo_empleado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Sin selección -" }));
+        combo_empleado.setModel(modeloCombo_empleados);
         combo_empleado.setPreferredSize(new java.awt.Dimension(120, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -203,6 +249,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_salir.setForeground(new java.awt.Color(255, 255, 255));
         boton_salir.setText("Salir");
         boton_salir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        boton_salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_salirActionPerformed(evt);
+            }
+        });
         panel_botones.add(boton_salir);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -216,6 +267,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void boton_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_salirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_boton_salirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_buscar;

@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Conexion {
+public final class Conexion {
 
-    private final static String CONEXION = "jdbc:mysql://192.168.121.22:3306/empresa";
+    /* IP en clase : 192.168.121.22
+       IP en casa  : 192.168.1.138 
+     */
+    private final static String CONEXION = "jdbc:mysql://192.168.1.138:3306/empresa";
     private final static String USUARIO = "admin";
     private final static String PASS = "admin";
 
