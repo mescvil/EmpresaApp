@@ -7,6 +7,7 @@ import clases.Direccion;
 import clases.Oficina;
 import excepciones.DniNoValidoException;
 import excepciones.LongitudNoValidaException;
+import java.util.Arrays;
 
 public abstract class Tecnicos extends Empleado {
 
@@ -62,4 +63,9 @@ public abstract class Tecnicos extends Empleado {
         this.tecnologias = tecnologias;
     }
 
+    public void setTecnologias(String[] tecnologias) {
+        for (String tecnologia : tecnologias) {
+            aniadeTecnologia(tecnologia);
+        }
+    }
 }

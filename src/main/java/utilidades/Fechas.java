@@ -1,6 +1,6 @@
 /*
  */
-package extras;
+package utilidades;
 
 import java.text.DateFormat;
 import java.text.ParseException;

@@ -7,33 +7,33 @@ import clases.Oficina;
 import excepciones.DniNoValidoException;
 import excepciones.LongitudNoValidaException;
 
-public class Analistas extends Tecnicos {
+public class Analista extends Tecnicos {
 
     // ----------------------------- ATRIBUTOS -----------------------------
     private String titulacion;
 
     // ----------------------------- CONSTRUCTORES -----------------------------
-    public Analistas(String dni, String nombre, String apellido_1, Oficina oficina, String titulacion)
+    public Analista(String dni, String nombre, String apellido_1, Oficina oficina, String titulacion)
             throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1, oficina);
         setTitulacion(titulacion);
     }
 
-    public Analistas(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina,
+    public Analista(String dni, String nombre, String apellido_1, String apellido_2, Oficina oficina,
             String titulacion) throws LongitudNoValidaException, DniNoValidoException {
 
         super(dni, nombre, apellido_1, apellido_2, oficina);
         setTitulacion(titulacion);
     }
 
-    public Analistas(String dni, String nombre, String apellido_1, String apellido_2,
+    public Analista(String dni, String nombre, String apellido_1, String apellido_2,
             GregorianCalendar fecha_nacimiento, Direccion direccion, Oficina oficina, String titulacion)
             throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, direccion, oficina);
         setTitulacion(titulacion);
     }
 
-    public Analistas(String dni, String nombre, String apellido_1, String apellido_2,
+    public Analista(String dni, String nombre, String apellido_1, String apellido_2,
             GregorianCalendar fecha_nacimiento, Oficina oficina, String titulacion)
             throws LongitudNoValidaException, DniNoValidoException {
         super(dni, nombre, apellido_1, apellido_2, fecha_nacimiento, oficina);
