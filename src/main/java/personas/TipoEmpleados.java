@@ -9,5 +9,5 @@ package personas;
  * @author theky
  */
 public enum TipoEmpleados {
-    Analistas, Programadores, Vendedores, Administrativos
+    Todos, Analistas, Programadores, Vendedores, Administrativos
 }

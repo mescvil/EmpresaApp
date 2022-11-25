@@ -11,7 +11,6 @@ import static interfaz.Dialogs.creaDialogError;
 import interfaz.VistaPrincipal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import personas.Empleado;
 import observador.ObservadorCarga;
 
@@ -22,7 +21,7 @@ import observador.ObservadorCarga;
 public class Controlador {
 
     private final VistaPrincipal vistaPrincipal;
-    private ArrayList<ObservadorCarga> lista_observadores = new ArrayList<>();
+    private final ArrayList<ObservadorCarga> lista_observadores = new ArrayList<>();
 
     public Controlador() {
         this.vistaPrincipal = new VistaPrincipal(this);
@@ -52,8 +51,28 @@ public class Controlador {
         return OficinasDB.leeOficinas();
     }
 
-    public ArrayList<Empleado> buscaEmpleados(HashMap<String, String> busqueda) {
-        return new ArrayList<>();
+    public ArrayList<Empleado> buscaEmpleados(String[] busqueda) throws CargaDatosException {
+        /* Si mete algo raro se devuelve vacio */
+        ArrayList<Empleado> empleados_econtrados = new ArrayList<>();
+
+        if (busqueda[0].equals("- Sin selección -")) {
+            /* Buscamos segun el empleado seleccionado en el comboBox */
+            switch (busqueda[1]) {
+                case "Administrativos" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeAdministrativos());
+                case "Analistas" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeAnalistas());
+                case "Vendedores" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeVendedores());
+                case "Programadores" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeProgramadores());
+                case "Todos" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeEmpleados());
+            }
+        } else {
+
+        }
+        return empleados_econtrados;
     }
 
     public void suscribirse(ObservadorCarga o) {

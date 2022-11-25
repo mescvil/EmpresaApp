@@ -279,8 +279,17 @@ public class VistaPrincipal extends JFrame implements ObservadorCarga {
     }//GEN-LAST:event_boton_limpiarActionPerformed
 
     private void boton_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarActionPerformed
-        // TODO
+        String empleado = (String) combo_empleado.getSelectedItem();
+        String oficina = (combo_oficina.getSelectedIndex() == 0)
+                ? (String) combo_oficina.getSelectedItem()
+                : ((Oficina) combo_oficina.getSelectedItem()).getCodigo();
+        String[] busqueda = {oficina, empleado};
 
+        try {
+            muestraEmpleadosSueldo(controlador.buscaEmpleados(busqueda), combo_mes.getSelectedIndex() + 1);
+        } catch (CargaDatosException ex) {
+            creaDialogError(this, ex.getMessage(), "Busqueda");
+        }
     }//GEN-LAST:event_boton_buscarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
