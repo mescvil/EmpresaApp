@@ -45,6 +45,9 @@
               <Connection code="modeloTablaEmpleados = new ModeloTablaEmpleados()" type="code"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TablaColores()"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

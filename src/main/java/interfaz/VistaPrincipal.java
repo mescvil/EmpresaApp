@@ -111,7 +111,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabla_empleados = new javax.swing.JTable();
+        tabla_empleados = new TablaColores();
         panel_filtros = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         modeloCombo_oficinas = new DefaultComboBoxModel<>();
