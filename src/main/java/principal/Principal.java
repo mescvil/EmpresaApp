@@ -1,7 +1,7 @@
 package principal;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import interfaz.VistaPrincipal;
+import controlador.Controlador;
 
 public class Principal {
 
@@ -9,7 +9,7 @@ public class Principal {
 
         /* Iniciamos la vista con un Look and Feel propio*/
         FlatLightLaf.setup();
-        new VistaPrincipal().setVisible(true);
+        new Controlador();
     }
 
 }

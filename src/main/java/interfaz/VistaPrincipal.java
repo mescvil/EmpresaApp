@@ -3,49 +3,40 @@
 package interfaz;
 
 import static interfaz.Dialogs.creaDialogError;
-import accesoDatos.*;
 import clases.Oficina;
+import controlador.Controlador;
 import excepciones.CargaDatosException;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import personas.Empleado;
 import personas.TipoEmpleados;
+import observador.ObservadorCarga;
 
 /**
  * @author Escoz
  */
-public class VistaPrincipal extends javax.swing.JFrame {
+public class VistaPrincipal extends JFrame implements ObservadorCarga {
+
+    private final Controlador controlador;
 
     private DefaultComboBoxModel<Object> modeloCombo_oficinas;
     private DefaultComboBoxModel<String> modeloCombo_empleados;
 
     private ModeloTablaEmpleados modeloTablaEmpleados;
 
+    //;
     /**
      * Creates new form VistaPrincipal
+     *
+     * @param controlador Controlador de la aplicacion
      */
-    public VistaPrincipal() {
-        abreConexionDB();
-
+    public VistaPrincipal(Controlador controlador) {
         initComponents();
 
-        cargaComboOficinas();
-        cargaComboEmpelados();
-        muestraEmpleadosSinSueldo();
-    }
-
-    /**
-     * Abre la conexion con la BBDD, en caso de error muestra un mensaje y para la ejecución.
-     */
-    private void abreConexionDB() {
-        try {
-            Conexion.abreConexion();
-        } catch (SQLException ex) {
-            creaDialogError(this, "No es posible acceder a la BBDD", "Conexión");
-            System.exit(1);
-        }
+        this.controlador = controlador;
+        controlador.suscribirse(this);
     }
 
     /**
@@ -53,7 +44,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     private void muestraEmpleadosSinSueldo() {
         try {
-            ArrayList<Empleado> lista_empleados = EmpleadosDB.leeEmpleados();
+            ArrayList<Empleado> lista_empleados = controlador.leeEmpleados();
 
             /* Añadimos todos los empleados */
             modeloTablaEmpleados.addEmpleados(lista_empleados);
@@ -86,7 +77,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     private void cargaComboOficinas() {
         try {
-            ArrayList<Oficina> oficinas = OficinasDB.leeOficinas();
+            ArrayList<Oficina> oficinas = controlador.leeOficinas();
             modeloCombo_oficinas.removeAllElements();
             modeloCombo_oficinas.addElement("- Sin selección -");
             modeloCombo_oficinas.addAll(oficinas);
@@ -94,6 +85,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Oficinas");
         }
+    }
+
+    @Override
+    public void actualiza() {
+        cargaComboOficinas();
+        cargaComboEmpelados();
+        muestraEmpleadosSinSueldo();
     }
 
     /**
@@ -281,23 +279,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_boton_limpiarActionPerformed
 
     private void boton_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarActionPerformed
-        ArrayList<Empleado> empleados_econtrados = new ArrayList<>();
-        String tipo_empleado = (String) combo_empleado.getSelectedItem();
+        // TODO
 
-        try {
-            switch (tipo_empleado) {
-                case "Administrativos" -> {
-                    empleados_econtrados.addAll(EmpleadosDB.leeAdministrativos());
-                }
-
-                default -> {
-                }
-            }
-            muestraEmpleadosSueldo(empleados_econtrados, combo_mes.getSelectedIndex() + 1);
-
-        } catch (CargaDatosException ex) {
-            creaDialogError(this, ex.getMessage(), "Buscar empleado");
-        }
     }//GEN-LAST:event_boton_buscarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
