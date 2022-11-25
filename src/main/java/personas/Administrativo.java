@@ -47,8 +47,8 @@ public class Administrativo extends NoTecnicos {
     }
 
     @Override
-    public float calculaSueldo() {
-        return super.calculaSueldo();
+    public float calculaSueldo(int mes) {
+        return super.calculaSueldo(mes) + 100;
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------

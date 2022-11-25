@@ -47,8 +47,8 @@ public class Programador extends Tecnicos {
     }
 
     @Override
-    public float calculaSueldo() {
-        return super.calculaSueldo();
+    public float calculaSueldo(int mes) {
+        return super.calculaSueldo(mes) + (25 * getTecnologias().size());
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------

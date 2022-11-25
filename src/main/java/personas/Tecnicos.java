@@ -46,8 +46,8 @@ public abstract class Tecnicos extends Empleado {
     }
 
     @Override
-    public float calculaSueldo() {
-        return super.calculaSueldo();
+    public float calculaSueldo(int mes) {
+        return super.calculaSueldo(mes) + 200;
     }
 
     public void aniadeTecnologia(String tecnologia) {

@@ -47,8 +47,8 @@ public class Analista extends Tecnicos {
     }
 
     @Override
-    public float calculaSueldo() {
-        return super.calculaSueldo();
+    public float calculaSueldo(int mes) {
+        return super.calculaSueldo(mes) + 300;
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------

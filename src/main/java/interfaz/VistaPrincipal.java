@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import personas.Empleado;
+import personas.TipoEmpleados;
 
 /**
  * @author Escoz
@@ -31,7 +32,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         initComponents();
 
         cargaComboOficinas();
-        cargaEmpleadosTabla();
+        cargaComboEmpelados();
+        muestraEmpleadosSinSueldo();
     }
 
     /**
@@ -49,28 +51,21 @@ public class VistaPrincipal extends javax.swing.JFrame {
     /**
      * Carga todos los empleados en la tabla principal
      */
-    private void cargaEmpleadosTabla() {
+    private void muestraEmpleadosSinSueldo() {
         try {
-            ArrayList<Empleado> lisa_empleados = EmpleadosDB.leeEmpleados();
-            ArrayList<String> tipos_empleados = new ArrayList<>();
-
-            /* Ineficiente pero funcional */
-            for (Empleado empleado : lisa_empleados) {
-                String tipo = empleado.getClass().getSimpleName();
-
-                if (!tipos_empleados.contains(tipo)) {
-                    tipos_empleados.add(tipo);
-                }
-            }
+            ArrayList<Empleado> lista_empleados = EmpleadosDB.leeEmpleados();
 
             /* Añadimos todos los empleados */
-            modeloTablaEmpleados.addEmpleados(lisa_empleados);
-
-            cargaComboEmpelados(tipos_empleados);
+            modeloTablaEmpleados.addEmpleados(lista_empleados);
 
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Empleados");
         }
+    }
+
+    private void muestraEmpleadosSueldo(ArrayList<Empleado> lista_empleados, int mes) {
+        /* Añadimos todos los empleados */
+        modeloTablaEmpleados.addEmpleados(lista_empleados, mes);
     }
 
     /**
@@ -78,11 +73,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
      *
      * @param tipos_empleados Lista con los tipos de empleados
      */
-    private void cargaComboEmpelados(ArrayList<String> tipos_empleados) {
+    private void cargaComboEmpelados() {
         modeloCombo_empleados.removeAllElements();
         modeloCombo_empleados.addElement("- Sin selección -");
-        for (String tipo_empleado : tipos_empleados) {
-            modeloCombo_empleados.addElement(tipo_empleado);
+        for (TipoEmpleados tipo : TipoEmpleados.values()) {
+            modeloCombo_empleados.addElement(tipo.name());
         }
     }
 
@@ -120,7 +115,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         modeloCombo_empleados = new DefaultComboBoxModel<>();
         combo_empleado = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        combo_mes = new javax.swing.JComboBox<>();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         boton_buscar = new javax.swing.JButton();
         boton_limpiar = new javax.swing.JButton();
@@ -191,13 +186,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panel_filtros.add(jLabel3, gridBagConstraints);
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        combo_mes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panel_filtros.add(jComboBox3, gridBagConstraints);
+        panel_filtros.add(combo_mes, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -208,6 +203,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_buscar.setBackground(new java.awt.Color(51, 153, 255));
         boton_buscar.setForeground(new java.awt.Color(255, 255, 255));
         boton_buscar.setText("Buscar");
+        boton_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_buscarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
@@ -216,6 +216,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         panel_filtros.add(boton_buscar, gridBagConstraints);
 
         boton_limpiar.setText("Limpiar");
+        boton_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_limpiarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
@@ -268,17 +273,44 @@ public class VistaPrincipal extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_boton_salirActionPerformed
 
+    private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
+        combo_empleado.setSelectedIndex(0);
+        combo_oficina.setSelectedIndex(0);
+        combo_mes.setSelectedIndex(0);
+        muestraEmpleadosSinSueldo();
+    }//GEN-LAST:event_boton_limpiarActionPerformed
+
+    private void boton_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarActionPerformed
+        ArrayList<Empleado> empleados_econtrados = new ArrayList<>();
+        String tipo_empleado = (String) combo_empleado.getSelectedItem();
+
+        try {
+            switch (tipo_empleado) {
+                case "Administrativos" -> {
+                    empleados_econtrados.addAll(EmpleadosDB.leeAdministrativos());
+                }
+
+                default -> {
+                }
+            }
+            muestraEmpleadosSueldo(empleados_econtrados, combo_mes.getSelectedIndex() + 1);
+
+        } catch (CargaDatosException ex) {
+            creaDialogError(this, ex.getMessage(), "Buscar empleado");
+        }
+    }//GEN-LAST:event_boton_buscarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_buscar;
     private javax.swing.JButton boton_imprimir;
     private javax.swing.JButton boton_limpiar;
     private javax.swing.JButton boton_salir;
     private javax.swing.JComboBox<String> combo_empleado;
+    private javax.swing.JComboBox<String> combo_mes;
     private javax.swing.JComboBox<Object> combo_oficina;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
