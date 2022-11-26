@@ -29,5 +29,4 @@ public class TablaColores extends JTable {
         }
         return componente;
     }
-
 }

@@ -2,6 +2,7 @@
  */
 package interfaz;
 
+import accesoDatos.EmpleadosDB;
 import static interfaz.Dialogs.creaDialogError;
 import static interfaz.Dialogs.creaDialogWarning;
 import clases.Oficina;
@@ -11,21 +12,24 @@ import excepciones.CargaDatosException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import observador.ObservadorEmpleado;
 import personas.Empleado;
 import personas.TipoEmpleados;
 
 /**
  * @author Escoz
  */
-public class VistaPrincipal extends JFrame {
-
+public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
+    
     private final Controlador controlador;
-
+    
     private DefaultComboBoxModel<Object> modeloCombo_oficinas;
     private DefaultComboBoxModel<String> modeloCombo_empleados;
-
-    private ModeloTablaEmpleados modeloTablaEmpleados;
-
+    
+    private ModeloTablaEmpleadosSueldo modeloTablaEmpleadosSueldo;
+    private ModeloTablaEmpleadosSimple modeloTablaEmpleadosSimple;
+    private boolean isModeloSueldo;
+    
     private final static String SIN_SELECCION = " Sin selección -";
 
     /**
@@ -35,9 +39,9 @@ public class VistaPrincipal extends JFrame {
      */
     public VistaPrincipal(Controlador controlador) {
         initComponents();
-
+        
         this.controlador = controlador;
-
+        
         cargaComboEmpelados();
         cargaComboOficinas();
         muestraEmpleadosSinSueldo();
@@ -50,17 +54,21 @@ public class VistaPrincipal extends JFrame {
         try {
             ArrayList<Empleado> lista_empleados = controlador.leeEmpleados();
 
-            /* Añadimos todos los empleados */
-            modeloTablaEmpleados.addEmpleados(lista_empleados);
-
+            /* Elegimos el modelo simple y añadimos todos los empleados */
+            tabla_empleados.setModel(modeloTablaEmpleadosSimple);
+            isModeloSueldo = false;
+            modeloTablaEmpleadosSimple.addEmpleados(lista_empleados);
+            
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Empleados");
         }
     }
-
+    
     private void muestraEmpleadosSueldo(ArrayList<Empleado> lista_empleados, int mes) {
-        /* Añadimos todos los empleados */
-        modeloTablaEmpleados.addEmpleados(lista_empleados, mes);
+        /* Elegimos el modelo de sueldo y añadimos todos los empleados */
+        tabla_empleados.setModel(modeloTablaEmpleadosSueldo);
+        isModeloSueldo = true;
+        modeloTablaEmpleadosSueldo.addEmpleados(lista_empleados, mes);
     }
 
     /**
@@ -86,9 +94,18 @@ public class VistaPrincipal extends JFrame {
             modeloCombo_oficinas.addElement(SIN_SELECCION);
             modeloCombo_oficinas.addElement("Todas");
             modeloCombo_oficinas.addAll(oficinas);
-
+            
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Oficinas");
+        }
+    }
+    
+    @Override
+    public void cambioEmpleados() {
+        if (isModeloSueldo) {
+            boton_buscarActionPerformed(null);
+        } else {
+            muestraEmpleadosSinSueldo();
         }
     }
 
@@ -123,17 +140,25 @@ public class VistaPrincipal extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("EmpresaApp");
-        setPreferredSize(new java.awt.Dimension(900, 400));
+        setPreferredSize(new java.awt.Dimension(900, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        tabla_empleados.setModel(modeloTablaEmpleados = new ModeloTablaEmpleados());
+        tabla_empleados.setModel(modeloTablaEmpleadosSueldo = new interfaz.ModeloTablaEmpleadosSueldo());
+        tabla_empleados.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        tabla_empleados.getTableHeader().setReorderingAllowed(false);
+        modeloTablaEmpleadosSimple = new ModeloTablaEmpleadosSimple();
+        tabla_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_empleadosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla_empleados);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
@@ -292,7 +317,7 @@ public class VistaPrincipal extends JFrame {
         } else {
             oficina = ((Oficina) combo_oficina.getSelectedItem()).getCodigo();
         }
-
+        
         try {
             muestraEmpleadosSueldo(controlador.buscaEmpleados(new String[]{oficina, empleado}),
                     combo_mes.getSelectedIndex() + 1);
@@ -300,6 +325,25 @@ public class VistaPrincipal extends JFrame {
             creaDialogError(this, ex.getMessage(), "Busqueda");
         }
     }//GEN-LAST:event_boton_buscarActionPerformed
+
+    private void tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_empleadosMouseClicked
+        int fila_actual = tabla_empleados.rowAtPoint(evt.getPoint());
+        Empleado empleado;
+        
+        if (isModeloSueldo) {
+            empleado = ((ModeloTablaEmpleadosSueldo) tabla_empleados.getModel()).getEmpleado(fila_actual);
+        } else {
+            empleado = ((ModeloTablaEmpleadosSimple) tabla_empleados.getModel()).getEmpleado(fila_actual);
+        }
+        
+        DialogoEmpleado dialogoEmpleado = new DialogoEmpleado(this, true, empleado);
+        dialogoEmpleado.setVisible(true);
+
+        /* Si se desea eliminar este empleado */
+        if (dialogoEmpleado.getBorrarEmpleado()) {
+            EmpleadosDB.eliminaEmpleado(empleado.getDni());
+        }
+    }//GEN-LAST:event_tabla_empleadosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_buscar;

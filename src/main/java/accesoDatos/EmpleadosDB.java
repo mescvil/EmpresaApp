@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import observador.ObservadorEmpleado;
 import personas.Administrativo;
 import personas.Analista;
 import personas.Empleado;
@@ -24,6 +25,7 @@ import personas.Vendedor;
 public class EmpleadosDB {
 
     public static String SIN_OFICINA = "sin oficina";
+    private static final ArrayList<ObservadorEmpleado> lista_observadores = new ArrayList<>();
 
     /*  ------- Selecciones normales ------- */
     private static final String SELECT_ADMINISTRATIVOS = "select * from empleados join "
@@ -75,6 +77,10 @@ public class EmpleadosDB {
         }
 
         return lista_empleados;
+    }
+
+    public static void eliminaEmpleado(String dni) {
+        notificaCambio();
     }
 
     /**
@@ -280,6 +286,16 @@ public class EmpleadosDB {
         }
 
         return lista_empleados;
+    }
+
+    public static void suscribirse(ObservadorEmpleado o) {
+        lista_observadores.add(o);
+    }
+
+    private static void notificaCambio() {
+        for (ObservadorEmpleado o : lista_observadores) {
+            o.cambioEmpleados();
+        }
     }
 
 }

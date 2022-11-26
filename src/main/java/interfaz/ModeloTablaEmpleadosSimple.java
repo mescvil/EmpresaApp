@@ -7,14 +7,12 @@ import personas.Empleado;
 /**
  * @author Escoz
  */
-public class ModeloTablaEmpleados extends AbstractTableModel {
+public class ModeloTablaEmpleadosSimple extends AbstractTableModel {
 
     private Object[][] datos_empleados = {};
-    private final String[] nombre_columnas = {"DNI", "Nombre", "Puesto", "Oficina", "Nomina (€)"};
+    private final String[] nombre_columnas = {"DNI", "Nombre", "Puesto", "Oficina"};
     private final boolean[] isEditable = {false, false, false, false, false};
-    private final Class[] clase_columnas = {String.class, String.class, String.class, String.class, Integer.class};
-
-    private float suma_nominas;
+    private final Class[] clase_columnas = {String.class, String.class, String.class, String.class};
 
     //  --------------------- MÉTODOS HEREDADOS  ---------------------
     @Override
@@ -55,7 +53,6 @@ public class ModeloTablaEmpleados extends AbstractTableModel {
     }
 
     public void addEmpleados(ArrayList<Empleado> empleados) {
-        suma_nominas = 0;
 
         /* Añadimos una columna extra para trampear los empleados */
         datos_empleados = new Object[empleados.size()][getColumnCount() + 1];
@@ -67,53 +64,13 @@ public class ModeloTablaEmpleados extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void addEmpleados(ArrayList<Empleado> empleados, int mes) {
-        suma_nominas = 0;
-
-        /* Añadimos una columna extra para trampear los empleados y una fila extra para la 
-        sumatoria de las nominas */
-        datos_empleados = new Object[empleados.size() + 1][getColumnCount() + 1];
-
-        for (int i = 0; i < empleados.size(); i++) {
-            addRow(empleados.get(i), i, mes);
-        }
-        addRowSuma(empleados.size());
-
-        fireTableDataChanged();
-    }
-
     private void addRow(Empleado empleado, int fila) {
 
         datos_empleados[fila][0] = empleado.getDni();
         datos_empleados[fila][1] = empleado.getNombreCompleto();
         datos_empleados[fila][2] = empleado.getClass().getSimpleName();
         datos_empleados[fila][3] = empleado.getOficina().getNombre();
-        datos_empleados[fila][4] = 0;
         datos_empleados[fila][nombre_columnas.length] = empleado;
-
-        fireTableRowsInserted(fila, fila);
-    }
-
-    private void addRow(Empleado empleado, int fila, int mes) {
-        float sueldo = empleado.calculaSueldo(mes);
-        suma_nominas += sueldo;
-
-        datos_empleados[fila][0] = empleado.getDni();
-        datos_empleados[fila][1] = empleado.getNombreCompleto();
-        datos_empleados[fila][2] = empleado.getClass().getSimpleName();
-        datos_empleados[fila][3] = empleado.getOficina().getNombre();
-        datos_empleados[fila][4] = sueldo;
-        datos_empleados[fila][nombre_columnas.length] = empleado;
-
-        fireTableRowsInserted(fila, fila);
-    }
-
-    private void addRowSuma(int fila) {
-        datos_empleados[fila][0] = "";
-        datos_empleados[fila][1] = "";
-        datos_empleados[fila][2] = "";
-        datos_empleados[fila][3] = "";
-        datos_empleados[fila][4] = suma_nominas;
 
         fireTableRowsInserted(fila, fila);
     }
