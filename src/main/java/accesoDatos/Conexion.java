@@ -6,10 +6,12 @@ import java.sql.SQLException;
 
 public final class Conexion {
 
-    /* IP en clase : 192.168.121.22
-       IP en casa  : 192.168.1.138 
+    /* 
+       IP en clase : 192.168.121.22
+       IP en piso  : 192.168.1.138
+       IP en casa  : 192.168.100.7
      */
-    private final static String CONEXION = "jdbc:mysql://192.168.121.22:3306/empresa";
+    private final static String CONEXION = "jdbc:mysql://192.168.100.7:3306/empresa";
     private final static String USUARIO = "admin";
     private final static String PASS = "admin";
 

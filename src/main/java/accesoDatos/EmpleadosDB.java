@@ -8,6 +8,7 @@ import clases.Oficina;
 import excepciones.CargaDatosException;
 import excepciones.DniNoValidoException;
 import excepciones.LongitudNoValidaException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,6 +23,9 @@ import personas.Vendedor;
 
 public class EmpleadosDB {
 
+    public static String SIN_OFICINA = "sin oficina";
+
+    /*  ------- Selecciones normales ------- */
     private static final String SELECT_ADMINISTRATIVOS = "select * from empleados join "
             + "administrativos on empleados.dni = administrativos.dni";
 
@@ -34,19 +38,41 @@ public class EmpleadosDB {
     private static final String SELECT_VENDEDORES = "select * from empleados join "
             + "vendedores on empleados.dni = vendedores.dni";
 
+    /*  ------- Selecciones de oficina ------- */
+    private static final String SELECT_ADMINISTRATIVOS_OFICINA = "select * from empleados join "
+            + "administrativos on empleados.dni = administrativos.dni where cod_oficina = ?";
+
+    private static final String SELECT_PROGRAMADORES_OFICINA = "select * from empleados join "
+            + "programadores on empleados.dni = programadores.dni where cod_oficina = ?";
+
+    private static final String SELECT_ANALISTAS_OFICINA = "select * from empleados join "
+            + "analistas on empleados.dni = analistas.dni where cod_oficina = ?";
+
+    private static final String SELECT_VENDEDORES_OFICINA = "select * from empleados join "
+            + "vendedores on empleados.dni = vendedores.dni where cod_oficina = ?";
+
     /**
      * Lee todos los empleados presentes en la BBDD
      *
+     * @param cod_oficina Codigo de oficina al que pertenecen, si no se quiere buscar por una en particular usar
+     * SIN_OFICINA
      * @return ArrayList con todos los empleados
      * @throws CargaDatosException En caso de error en la lectura de algún tipo de empelado
      */
-    public static ArrayList<Empleado> leeEmpleados() throws CargaDatosException {
+    public static ArrayList<Empleado> leeEmpleados(String cod_oficina) throws CargaDatosException {
         ArrayList<Empleado> lista_empleados = new ArrayList<>();
 
-        lista_empleados.addAll(leeAdministrativos());
-        lista_empleados.addAll(leeProgramadores());
-        lista_empleados.addAll(leeAnalistas());
-        lista_empleados.addAll(leeVendedores());
+        if (cod_oficina.equals(SIN_OFICINA)) {
+            lista_empleados.addAll(leeAdministrativos(SIN_OFICINA));
+            lista_empleados.addAll(leeProgramadores(SIN_OFICINA));
+            lista_empleados.addAll(leeAnalistas(SIN_OFICINA));
+            lista_empleados.addAll(leeVendedores(SIN_OFICINA));
+        } else {
+            lista_empleados.addAll(leeAdministrativos(cod_oficina));
+            lista_empleados.addAll(leeProgramadores(cod_oficina));
+            lista_empleados.addAll(leeAnalistas(cod_oficina));
+            lista_empleados.addAll(leeVendedores(cod_oficina));
+        }
 
         return lista_empleados;
     }
@@ -54,15 +80,26 @@ public class EmpleadosDB {
     /**
      * Lee todos los programadores presentes en la BBDD
      *
+     * @param cod_oficina Codigo de oficina al que pertenecen, si no se quiere buscar por una en particular usar
+     * SIN_OFICINA
      * @return ArrayList con todos los programadores
      * @throws CargaDatosException En caso de error en la lectura de los programadores
      */
-    public static ArrayList<Programador> leeProgramadores() throws CargaDatosException {
+    public static ArrayList<Programador> leeProgramadores(String cod_oficina) throws CargaDatosException {
         ArrayList<Programador> lista_empleados = new ArrayList<>();
 
         try {
-            Statement statement = conexion.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_PROGRAMADORES);
+            ResultSet resultSet;
+
+            if (cod_oficina.equals(SIN_OFICINA)) {
+                Statement statement = conexion.createStatement();
+                resultSet = statement.executeQuery(SELECT_PROGRAMADORES);
+
+            } else {
+                PreparedStatement preparedStatement = conexion.prepareStatement(SELECT_PROGRAMADORES_OFICINA);
+                preparedStatement.setString(1, cod_oficina);
+                resultSet = preparedStatement.executeQuery();
+            }
 
             while (resultSet.next()) {
 
@@ -95,15 +132,26 @@ public class EmpleadosDB {
     /**
      * Lee todos los analistas presentes en la BBDD
      *
+     * @param cod_oficina Codigo de oficina al que pertenecen, si no se quiere buscar por una en particular usar
+     * SIN_OFICINA
      * @return ArrayList con todos los analistas
      * @throws CargaDatosException En caso de error en la lectura de los analistas
      */
-    public static ArrayList<Analista> leeAnalistas() throws CargaDatosException {
+    public static ArrayList<Analista> leeAnalistas(String cod_oficina) throws CargaDatosException {
         ArrayList<Analista> lista_empleados = new ArrayList<>();
 
         try {
-            Statement statement = conexion.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_ANALISTAS);
+            ResultSet resultSet;
+
+            if (cod_oficina.equals(SIN_OFICINA)) {
+                Statement statement = conexion.createStatement();
+                resultSet = statement.executeQuery(SELECT_ANALISTAS);
+
+            } else {
+                PreparedStatement preparedStatement = conexion.prepareStatement(SELECT_ANALISTAS_OFICINA);
+                preparedStatement.setString(1, cod_oficina);
+                resultSet = preparedStatement.executeQuery();
+            }
 
             while (resultSet.next()) {
 
@@ -137,15 +185,26 @@ public class EmpleadosDB {
     /**
      * Lee todos los administrativos presentes en la BBDD
      *
+     * @param cod_oficina Codigo de oficina al que pertenecen, si no se quiere buscar por una en particular usar
+     * SIN_OFICINA
      * @return ArrayList con todos los administrativos
      * @throws CargaDatosException En caso de error en la lectura de los administrativos
      */
-    public static ArrayList<Administrativo> leeAdministrativos() throws CargaDatosException {
+    public static ArrayList<Administrativo> leeAdministrativos(String cod_oficina) throws CargaDatosException {
         ArrayList<Administrativo> lista_empleados = new ArrayList<>();
 
         try {
-            Statement statement = conexion.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_ADMINISTRATIVOS);
+            ResultSet resultSet;
+
+            if (cod_oficina.equals(SIN_OFICINA)) {
+                Statement statement = conexion.createStatement();
+                resultSet = statement.executeQuery(SELECT_ADMINISTRATIVOS);
+
+            } else {
+                PreparedStatement preparedStatement = conexion.prepareStatement(SELECT_ADMINISTRATIVOS_OFICINA);
+                preparedStatement.setString(1, cod_oficina);
+                resultSet = preparedStatement.executeQuery();
+            }
 
             while (resultSet.next()) {
 
@@ -176,15 +235,26 @@ public class EmpleadosDB {
     /**
      * Lee todos los vendedores presentes en la BBDD
      *
+     * @param cod_oficina Codigo de oficina al que pertenecen, si no se quiere buscar por una en particular usar
+     * SIN_OFICINA
      * @return ArrayList con todos los vendedores
      * @throws CargaDatosException En caso de error en la lectura de los vendedores
      */
-    public static ArrayList<Vendedor> leeVendedores() throws CargaDatosException {
+    public static ArrayList<Vendedor> leeVendedores(String cod_oficina) throws CargaDatosException {
         ArrayList<Vendedor> lista_empleados = new ArrayList<>();
 
         try {
-            Statement statement = conexion.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_VENDEDORES);
+            ResultSet resultSet;
+
+            if (cod_oficina.equals(SIN_OFICINA)) {
+                Statement statement = conexion.createStatement();
+                resultSet = statement.executeQuery(SELECT_VENDEDORES);
+
+            } else {
+                PreparedStatement preparedStatement = conexion.prepareStatement(SELECT_VENDEDORES_OFICINA);
+                preparedStatement.setString(1, cod_oficina);
+                resultSet = preparedStatement.executeQuery();
+            }
 
             while (resultSet.next()) {
 

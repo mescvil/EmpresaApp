@@ -12,12 +12,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import personas.Empleado;
 import personas.TipoEmpleados;
-import observador.ObservadorCarga;
 
 /**
  * @author Escoz
  */
-public class VistaPrincipal extends JFrame implements ObservadorCarga {
+public class VistaPrincipal extends JFrame {
 
     private final Controlador controlador;
 
@@ -26,7 +25,6 @@ public class VistaPrincipal extends JFrame implements ObservadorCarga {
 
     private ModeloTablaEmpleados modeloTablaEmpleados;
 
-    //;
     /**
      * Creates new form VistaPrincipal
      *
@@ -36,7 +34,10 @@ public class VistaPrincipal extends JFrame implements ObservadorCarga {
         initComponents();
 
         this.controlador = controlador;
-        controlador.suscribirse(this);
+
+        cargaComboEmpelados();
+        cargaComboOficinas();
+        muestraEmpleadosSinSueldo();
     }
 
     /**
@@ -85,13 +86,6 @@ public class VistaPrincipal extends JFrame implements ObservadorCarga {
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Oficinas");
         }
-    }
-
-    @Override
-    public void actualiza() {
-        cargaComboOficinas();
-        cargaComboEmpelados();
-        muestraEmpleadosSinSueldo();
     }
 
     /**

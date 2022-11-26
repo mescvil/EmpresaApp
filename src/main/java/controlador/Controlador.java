@@ -5,6 +5,7 @@
 package controlador;
 
 import accesoDatos.*;
+import static accesoDatos.EmpleadosDB.SIN_OFICINA;
 import clases.Oficina;
 import excepciones.CargaDatosException;
 import static interfaz.Dialogs.creaDialogError;
@@ -12,7 +13,6 @@ import interfaz.VistaPrincipal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import personas.Empleado;
-import observador.ObservadorCarga;
 
 /**
  *
@@ -21,13 +21,12 @@ import observador.ObservadorCarga;
 public class Controlador {
 
     private final VistaPrincipal vistaPrincipal;
-    private final ArrayList<ObservadorCarga> lista_observadores = new ArrayList<>();
 
     public Controlador() {
-        this.vistaPrincipal = new VistaPrincipal(this);
-        vistaPrincipal.setVisible(true);
 
         abreConexionDB();
+        this.vistaPrincipal = new VistaPrincipal(this);
+        vistaPrincipal.setVisible(true);
     }
 
     /**
@@ -36,15 +35,14 @@ public class Controlador {
     private void abreConexionDB() {
         try {
             Conexion.abreConexion();
-            notifica();
         } catch (SQLException ex) {
-            creaDialogError(null, "No es posible acceder a la BBDD", "Conexión");
+            creaDialogError(null, "No es posible acceder a la BBDD: " + ex.getMessage(), "Conexión");
             System.exit(1);
         }
     }
 
     public ArrayList<Empleado> leeEmpleados() throws CargaDatosException {
-        return EmpleadosDB.leeEmpleados();
+        return EmpleadosDB.leeEmpleados(SIN_OFICINA);
     }
 
     public ArrayList<Oficina> leeOficinas() throws CargaDatosException {
@@ -59,30 +57,31 @@ public class Controlador {
             /* Buscamos segun el empleado seleccionado en el comboBox */
             switch (busqueda[1]) {
                 case "Administrativos" ->
-                    empleados_econtrados.addAll(EmpleadosDB.leeAdministrativos());
+                    empleados_econtrados.addAll(EmpleadosDB.leeAdministrativos(SIN_OFICINA));
                 case "Analistas" ->
-                    empleados_econtrados.addAll(EmpleadosDB.leeAnalistas());
+                    empleados_econtrados.addAll(EmpleadosDB.leeAnalistas(SIN_OFICINA));
                 case "Vendedores" ->
-                    empleados_econtrados.addAll(EmpleadosDB.leeVendedores());
+                    empleados_econtrados.addAll(EmpleadosDB.leeVendedores(SIN_OFICINA));
                 case "Programadores" ->
-                    empleados_econtrados.addAll(EmpleadosDB.leeProgramadores());
+                    empleados_econtrados.addAll(EmpleadosDB.leeProgramadores(SIN_OFICINA));
                 case "Todos" ->
-                    empleados_econtrados.addAll(EmpleadosDB.leeEmpleados());
+                    empleados_econtrados.addAll(EmpleadosDB.leeEmpleados(SIN_OFICINA));
             }
+            /* Si selecciona una oficina */
         } else {
-
+            switch (busqueda[1]) {
+                case "Administrativos" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeAdministrativos(busqueda[0]));
+                case "Analistas" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeAnalistas(busqueda[0]));
+                case "Vendedores" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeVendedores(busqueda[0]));
+                case "Programadores" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeProgramadores(busqueda[0]));
+                case "Todos" ->
+                    empleados_econtrados.addAll(EmpleadosDB.leeEmpleados(busqueda[0]));
+            }
         }
         return empleados_econtrados;
     }
-
-    public void suscribirse(ObservadorCarga o) {
-        lista_observadores.add(o);
-    }
-
-    private void notifica() {
-        for (ObservadorCarga observador : lista_observadores) {
-            observador.actualiza();
-        }
-    }
-
 }

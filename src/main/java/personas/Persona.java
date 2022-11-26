@@ -76,7 +76,7 @@ public abstract class Persona implements Comparable<Persona> {
         if (!(obj instanceof Persona)) {
             return false;
         }
-        return toString().equals(obj.toString());
+        return getDni().equals(((Persona) obj).getDni());
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------
