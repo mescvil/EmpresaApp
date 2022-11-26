@@ -25,4 +25,16 @@ public final class Dialogs {
                 titulo, JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Crea un JDialog con un mensaje de advertencia
+     *
+     * @param padre JFrame padre para ubicar el mensaje en el centro de este
+     * @param mensaje Mensaje que a de aparecer en el JDialog
+     * @param titulo Titulo del JDialog
+     */
+    public static void creaDialogWarning(JFrame padre, String mensaje, String titulo) {
+        JOptionPane.showMessageDialog(padre, mensaje,
+                titulo, JOptionPane.WARNING_MESSAGE);
+    }
+
 }

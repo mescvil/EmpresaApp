@@ -53,7 +53,7 @@ public class Controlador {
         /* Si mete algo raro se devuelve vacio */
         ArrayList<Empleado> empleados_econtrados = new ArrayList<>();
 
-        if (busqueda[0].equals("- Sin selección -")) {
+        if (busqueda[0].equals("Todas")) {
             /* Buscamos segun el empleado seleccionado en el comboBox */
             switch (busqueda[1]) {
                 case "Administrativos" ->

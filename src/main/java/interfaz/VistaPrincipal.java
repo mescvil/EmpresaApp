@@ -3,6 +3,7 @@
 package interfaz;
 
 import static interfaz.Dialogs.creaDialogError;
+import static interfaz.Dialogs.creaDialogWarning;
 import clases.Oficina;
 import controlador.Controlador;
 import excepciones.CargaDatosException;
@@ -24,6 +25,8 @@ public class VistaPrincipal extends JFrame {
     private DefaultComboBoxModel<String> modeloCombo_empleados;
 
     private ModeloTablaEmpleados modeloTablaEmpleados;
+
+    private final static String SIN_SELECCION = " Sin selección -";
 
     /**
      * Creates new form VistaPrincipal
@@ -67,7 +70,7 @@ public class VistaPrincipal extends JFrame {
      */
     private void cargaComboEmpelados() {
         modeloCombo_empleados.removeAllElements();
-        modeloCombo_empleados.addElement("- Sin selección -");
+        modeloCombo_empleados.addElement(SIN_SELECCION);
         for (TipoEmpleados tipo : TipoEmpleados.values()) {
             modeloCombo_empleados.addElement(tipo.name());
         }
@@ -80,7 +83,8 @@ public class VistaPrincipal extends JFrame {
         try {
             ArrayList<Oficina> oficinas = controlador.leeOficinas();
             modeloCombo_oficinas.removeAllElements();
-            modeloCombo_oficinas.addElement("- Sin selección -");
+            modeloCombo_oficinas.addElement(SIN_SELECCION);
+            modeloCombo_oficinas.addElement("Todas");
             modeloCombo_oficinas.addAll(oficinas);
 
         } catch (CargaDatosException ex) {
@@ -274,13 +278,24 @@ public class VistaPrincipal extends JFrame {
 
     private void boton_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarActionPerformed
         String empleado = (String) combo_empleado.getSelectedItem();
-        String oficina = (combo_oficina.getSelectedIndex() == 0)
-                ? (String) combo_oficina.getSelectedItem()
-                : ((Oficina) combo_oficina.getSelectedItem()).getCodigo();
-        String[] busqueda = {oficina, empleado};
+        String oficina;
+
+        /* Evitamos busquedas raras */
+        if (empleado.equals(SIN_SELECCION) || combo_oficina.getSelectedIndex() == 0) {
+            creaDialogWarning(this, "Selecciona un empleado y oficina", "Busqueda");
+            return;
+        }
+
+        /* Hacemos la seleccion de oficinas */
+        if (combo_oficina.getSelectedIndex() == 1) {
+            oficina = "Todas";
+        } else {
+            oficina = ((Oficina) combo_oficina.getSelectedItem()).getCodigo();
+        }
 
         try {
-            muestraEmpleadosSueldo(controlador.buscaEmpleados(busqueda), combo_mes.getSelectedIndex() + 1);
+            muestraEmpleadosSueldo(controlador.buscaEmpleados(new String[]{oficina, empleado}),
+                    combo_mes.getSelectedIndex() + 1);
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Busqueda");
         }
