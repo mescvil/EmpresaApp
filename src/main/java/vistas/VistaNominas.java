@@ -2,9 +2,12 @@
  */
 package vistas;
 
+import utilidades.ModeloTablaEmpleadosSimple;
+import utilidades.TablaColores;
+import utilidades.ModeloTablaEmpleadosSueldo;
 import accesoDatos.EmpleadosDB;
-import static vistas.Dialogs.creaDialogError;
-import static vistas.Dialogs.creaDialogWarning;
+import static utilidades.Dialogs.creaDialogError;
+import static utilidades.Dialogs.creaDialogWarning;
 import clases.Oficina;
 import controlador.Controlador;
 import excepciones.CargaDatosException;
@@ -19,7 +22,7 @@ import empleados.TipoEmpleados;
 /**
  * @author Escoz
  */
-public class VistaPrincipal extends JFrame {
+public class VistaNominas extends JFrame {
 
     private final Controlador controlador;
 
@@ -37,7 +40,7 @@ public class VistaPrincipal extends JFrame {
      *
      * @param controlador Controlador de la aplicacion
      */
-    public VistaPrincipal(Controlador controlador) {
+    public VistaNominas(Controlador controlador) {
         initComponents();
 
         this.controlador = controlador;
@@ -136,13 +139,18 @@ public class VistaPrincipal extends JFrame {
         boton_imprimir = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         boton_salir = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("EmpresaApp");
+        setTitle("Hyperion App");
         setPreferredSize(new java.awt.Dimension(900, 500));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
+            }
+        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        tabla_empleados.setModel(modeloTablaEmpleadosSueldo = new vistas.ModeloTablaEmpleadosSueldo());
+        tabla_empleados.setModel(modeloTablaEmpleadosSueldo = new utilidades.ModeloTablaEmpleadosSueldo());
         tabla_empleados.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tabla_empleados.getTableHeader().setReorderingAllowed(false);
         modeloTablaEmpleadosSimple = new ModeloTablaEmpleadosSimple();
@@ -284,6 +292,7 @@ public class VistaPrincipal extends JFrame {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         getContentPane().add(panel_botones, gridBagConstraints);
+        setJMenuBar(menuBar);
 
         pack();
         setLocationRelativeTo(null);
@@ -349,6 +358,11 @@ public class VistaPrincipal extends JFrame {
         }
     }//GEN-LAST:event_tabla_empleadosMouseClicked
 
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+        this.setVisible(false);
+        controlador.cambiaVentana(Controlador.DIALOGO_INICIAL);
+    }//GEN-LAST:event_formComponentHidden
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_buscar;
     private javax.swing.JButton boton_imprimir;
@@ -364,6 +378,7 @@ public class VistaPrincipal extends JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JPanel panel_botones;
     private javax.swing.JPanel panel_filtros;
     private javax.swing.JTable tabla_empleados;

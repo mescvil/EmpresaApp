@@ -8,12 +8,13 @@ import accesoDatos.*;
 import static accesoDatos.EmpleadosDB.SIN_OFICINA;
 import clases.Oficina;
 import excepciones.CargaDatosException;
-import static vistas.Dialogs.creaDialogError;
-import vistas.VistaPrincipal;
+import static utilidades.Dialogs.creaDialogError;
+import vistas.VistaNominas;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import observador.ObservadorEmpleado;
 import empleados.Empleado;
+import vistas.DialogoInicial;
 
 /**
  *
@@ -21,14 +22,29 @@ import empleados.Empleado;
  */
 public class Controlador implements ObservadorEmpleado {
 
-    private final VistaPrincipal vistaPrincipal;
+    public static final int DIALOGO_INICIAL = 0;
+    public static final int VISTA_NOMINAS = 1;
+
+    private final VistaNominas vistaNominas;
+    private final DialogoInicial dialogoInicial;
 
     public Controlador() {
         abreConexionDB();
         EmpleadosDB.suscribirse(this);
 
-        this.vistaPrincipal = new VistaPrincipal(this);
-        vistaPrincipal.setVisible(true);
+        this.dialogoInicial = new DialogoInicial(null, true, this);
+        this.vistaNominas = new VistaNominas(this);
+
+        dialogoInicial.setVisible(true);
+    }
+
+    public void cambiaVentana(int ventana) {
+        switch (ventana) {
+            case VISTA_NOMINAS ->
+                vistaNominas.setVisible(true);
+            case DIALOGO_INICIAL ->
+                dialogoInicial.setVisible(true);
+        }
     }
 
     /**
@@ -93,7 +109,7 @@ public class Controlador implements ObservadorEmpleado {
 
     @Override
     public void cambioEmpleados() {
-        vistaPrincipal.actualizaTabla();
+        vistaNominas.actualizaTabla();
     }
 
 }

@@ -102,6 +102,8 @@ public class DialogoEmpleado extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos empleado");
+        setPreferredSize(new java.awt.Dimension(600, 300));
+        setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panel_tecnologias.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista de tecnologías"));
