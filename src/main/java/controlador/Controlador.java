@@ -12,19 +12,21 @@ import static interfaz.Dialogs.creaDialogError;
 import interfaz.VistaPrincipal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import observador.ObservadorEmpleado;
 import personas.Empleado;
 
 /**
  *
  * @author theky
  */
-public class Controlador {
+public class Controlador implements ObservadorEmpleado {
 
     private final VistaPrincipal vistaPrincipal;
 
     public Controlador() {
-
         abreConexionDB();
+        EmpleadosDB.suscribirse(this);
+
         this.vistaPrincipal = new VistaPrincipal(this);
         vistaPrincipal.setVisible(true);
     }
@@ -43,6 +45,10 @@ public class Controlador {
 
     public ArrayList<Empleado> leeEmpleados() throws CargaDatosException {
         return EmpleadosDB.leeEmpleados(SIN_OFICINA);
+    }
+
+    public void eliminaEmpleado(String dni) throws SQLException {
+        EmpleadosDB.eliminaEmpleado(dni);
     }
 
     public ArrayList<Oficina> leeOficinas() throws CargaDatosException {
@@ -84,4 +90,10 @@ public class Controlador {
         }
         return empleados_econtrados;
     }
+
+    @Override
+    public void cambioEmpleados() {
+        vistaPrincipal.actualizaTabla();
+    }
+
 }

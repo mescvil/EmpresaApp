@@ -53,6 +53,9 @@ public class EmpleadosDB {
     private static final String SELECT_VENDEDORES_OFICINA = "select * from empleados join "
             + "vendedores on empleados.dni = vendedores.dni where cod_oficina = ?";
 
+    /*  ------- Delete ------- */
+    private static final String DROP_EMPLEADO = "delete from empleados where dni = ?";
+
     /**
      * Lee todos los empleados presentes en la BBDD
      *
@@ -79,7 +82,17 @@ public class EmpleadosDB {
         return lista_empleados;
     }
 
-    public static void eliminaEmpleado(String dni) {
+    /**
+     * Elimina un empleado por un dni dado
+     *
+     * @param dni DNI del empleado a eliminar
+     * @throws SQLException En caso de error
+     */
+    public static void eliminaEmpleado(String dni) throws SQLException {
+        PreparedStatement preparedStatement = conexion.prepareStatement(DROP_EMPLEADO);
+        preparedStatement.setString(1, dni);
+        preparedStatement.executeUpdate();
+
         notificaCambio();
     }
 

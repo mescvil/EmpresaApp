@@ -3,15 +3,19 @@
 package interfaz;
 
 import javax.swing.DefaultListModel;
+import personas.Administrativo;
+import personas.Analista;
 import personas.Empleado;
+import personas.Programador;
 import personas.Tecnicos;
+import personas.Vendedor;
 
 /**
  *
  * @author Escoz
  */
 public class DialogoEmpleado extends javax.swing.JDialog {
-    
+
     private boolean eliminar_empleado = false;
     private Empleado empleado;
 
@@ -22,18 +26,19 @@ public class DialogoEmpleado extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.empleado = empleado;
-        
+
         rellenaDatos();
         setLocationRelativeTo(parent);
     }
-    
+
     private void rellenaDatos() {
+
         campo_dni.setText(empleado.getDni());
         campo_nombre.setText(empleado.getNombreCompleto());
         campo_direccion.setText(empleado.getDireccion().toString());
         campo_oficina.setText(empleado.getOficina().toString());
         campo_puesto.setText(empleado.getClass().getSimpleName());
-        
+
         DefaultListModel<String> modelo_lista = new DefaultListModel<>();
         /* Si es un tecnico rellenamos la lista de tecnologias */
         if (empleado instanceof Tecnicos tecnico) {
@@ -42,8 +47,23 @@ public class DialogoEmpleado extends javax.swing.JDialog {
             modelo_lista.addElement("- Sin tecnologías -");
         }
         lista_tecnologias.setModel(modelo_lista);
+
+        /* Segun el tipo de empleado rellenamos el ultimo campo */
+        if (empleado instanceof Analista analista) {
+            label_multiple.setText("Titulación");
+            campo_multiple.setText(analista.getTitulacion());
+        } else if (empleado instanceof Administrativo administrativo) {
+            label_multiple.setText("Ofimatica");
+            campo_multiple.setText(administrativo.getNivelOfimatica().name());
+        } else if (empleado instanceof Programador programador) {
+            label_multiple.setText("Experiencia");
+            campo_multiple.setText(programador.getNivel_experiencia().name());
+        } else if (empleado instanceof Vendedor vendedor) {
+            label_multiple.setText("Zona");
+            campo_multiple.setText(String.valueOf(vendedor.getZona()));
+        }
     }
-    
+
     public boolean getBorrarEmpleado() {
         return eliminar_empleado;
     }
@@ -73,6 +93,8 @@ public class DialogoEmpleado extends javax.swing.JDialog {
         campo_puesto = new javax.swing.JTextField();
         boton_eliminar = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        label_multiple = new javax.swing.JLabel();
+        campo_multiple = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos empleado");
@@ -187,6 +209,7 @@ public class DialogoEmpleado extends javax.swing.JDialog {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         panel_datos.add(campo_puesto, gridBagConstraints);
@@ -201,8 +224,8 @@ public class DialogoEmpleado extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 5);
         panel_datos.add(boton_eliminar, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -212,6 +235,23 @@ public class DialogoEmpleado extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         panel_datos.add(filler1, gridBagConstraints);
+
+        label_multiple.setText("n/a");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 10);
+        panel_datos.add(label_multiple, gridBagConstraints);
+
+        campo_multiple.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
+        panel_datos.add(campo_multiple, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -235,6 +275,7 @@ public class DialogoEmpleado extends javax.swing.JDialog {
     private javax.swing.JButton boton_eliminar;
     private javax.swing.JTextField campo_direccion;
     private javax.swing.JTextField campo_dni;
+    private javax.swing.JTextField campo_multiple;
     private javax.swing.JTextField campo_nombre;
     private javax.swing.JTextField campo_oficina;
     private javax.swing.JTextField campo_puesto;
@@ -242,6 +283,7 @@ public class DialogoEmpleado extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel label_direccion;
     private javax.swing.JLabel label_dni;
+    private javax.swing.JLabel label_multiple;
     private javax.swing.JLabel label_nombre;
     private javax.swing.JLabel label_oficina;
     private javax.swing.JLabel label_puesto;

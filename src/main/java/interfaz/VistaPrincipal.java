@@ -8,28 +8,28 @@ import static interfaz.Dialogs.creaDialogWarning;
 import clases.Oficina;
 import controlador.Controlador;
 import excepciones.CargaDatosException;
+import java.sql.SQLException;
 
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
-import observador.ObservadorEmpleado;
 import personas.Empleado;
 import personas.TipoEmpleados;
 
 /**
  * @author Escoz
  */
-public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
-    
+public class VistaPrincipal extends JFrame {
+
     private final Controlador controlador;
-    
+
     private DefaultComboBoxModel<Object> modeloCombo_oficinas;
     private DefaultComboBoxModel<String> modeloCombo_empleados;
-    
+
     private ModeloTablaEmpleadosSueldo modeloTablaEmpleadosSueldo;
     private ModeloTablaEmpleadosSimple modeloTablaEmpleadosSimple;
     private boolean isModeloSueldo;
-    
+
     private final static String SIN_SELECCION = " Sin selección -";
 
     /**
@@ -39,9 +39,9 @@ public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
      */
     public VistaPrincipal(Controlador controlador) {
         initComponents();
-        
+
         this.controlador = controlador;
-        
+
         cargaComboEmpelados();
         cargaComboOficinas();
         muestraEmpleadosSinSueldo();
@@ -58,12 +58,12 @@ public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
             tabla_empleados.setModel(modeloTablaEmpleadosSimple);
             isModeloSueldo = false;
             modeloTablaEmpleadosSimple.addEmpleados(lista_empleados);
-            
+
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Empleados");
         }
     }
-    
+
     private void muestraEmpleadosSueldo(ArrayList<Empleado> lista_empleados, int mes) {
         /* Elegimos el modelo de sueldo y añadimos todos los empleados */
         tabla_empleados.setModel(modeloTablaEmpleadosSueldo);
@@ -94,14 +94,13 @@ public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
             modeloCombo_oficinas.addElement(SIN_SELECCION);
             modeloCombo_oficinas.addElement("Todas");
             modeloCombo_oficinas.addAll(oficinas);
-            
+
         } catch (CargaDatosException ex) {
             creaDialogError(this, ex.getMessage(), "Oficinas");
         }
     }
-    
-    @Override
-    public void cambioEmpleados() {
+
+    public void actualizaTabla() {
         if (isModeloSueldo) {
             boton_buscarActionPerformed(null);
         } else {
@@ -317,7 +316,7 @@ public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
         } else {
             oficina = ((Oficina) combo_oficina.getSelectedItem()).getCodigo();
         }
-        
+
         try {
             muestraEmpleadosSueldo(controlador.buscaEmpleados(new String[]{oficina, empleado}),
                     combo_mes.getSelectedIndex() + 1);
@@ -329,19 +328,24 @@ public class VistaPrincipal extends JFrame implements ObservadorEmpleado {
     private void tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_empleadosMouseClicked
         int fila_actual = tabla_empleados.rowAtPoint(evt.getPoint());
         Empleado empleado;
-        
+
         if (isModeloSueldo) {
             empleado = ((ModeloTablaEmpleadosSueldo) tabla_empleados.getModel()).getEmpleado(fila_actual);
         } else {
             empleado = ((ModeloTablaEmpleadosSimple) tabla_empleados.getModel()).getEmpleado(fila_actual);
         }
-        
+
         DialogoEmpleado dialogoEmpleado = new DialogoEmpleado(this, true, empleado);
         dialogoEmpleado.setVisible(true);
 
         /* Si se desea eliminar este empleado */
         if (dialogoEmpleado.getBorrarEmpleado()) {
-            EmpleadosDB.eliminaEmpleado(empleado.getDni());
+            try {
+                EmpleadosDB.eliminaEmpleado(empleado.getDni());
+
+            } catch (SQLException ex) {
+                creaDialogError(this, "No es posible elimiar este empleado: " + ex.getMessage(), "Eliminar");
+            }
         }
     }//GEN-LAST:event_tabla_empleadosMouseClicked
 
