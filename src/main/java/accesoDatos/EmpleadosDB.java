@@ -16,11 +16,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import observador.ObservadorEmpleado;
-import personas.Administrativo;
-import personas.Analista;
-import personas.Empleado;
-import personas.Programador;
-import personas.Vendedor;
+import empleados.Administrativo;
+import empleados.Analista;
+import empleados.Empleado;
+import empleados.Programador;
+import empleados.Vendedor;
 
 public class EmpleadosDB {
 

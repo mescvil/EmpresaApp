@@ -2,7 +2,7 @@ package clases;
 
 import java.util.TreeMap;
 
-import personas.Empleado;
+import empleados.Empleado;
 
 public class Empresa {
 

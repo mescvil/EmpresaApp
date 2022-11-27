@@ -8,12 +8,12 @@ import accesoDatos.*;
 import static accesoDatos.EmpleadosDB.SIN_OFICINA;
 import clases.Oficina;
 import excepciones.CargaDatosException;
-import static interfaz.Dialogs.creaDialogError;
-import interfaz.VistaPrincipal;
+import static vistas.Dialogs.creaDialogError;
+import vistas.VistaPrincipal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import observador.ObservadorEmpleado;
-import personas.Empleado;
+import empleados.Empleado;
 
 /**
  *

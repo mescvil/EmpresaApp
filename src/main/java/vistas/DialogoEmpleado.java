@@ -1,14 +1,14 @@
 /*
  */
-package interfaz;
+package vistas;
 
 import javax.swing.DefaultListModel;
-import personas.Administrativo;
-import personas.Analista;
-import personas.Empleado;
-import personas.Programador;
-import personas.Tecnicos;
-import personas.Vendedor;
+import empleados.Administrativo;
+import empleados.Analista;
+import empleados.Empleado;
+import empleados.Programador;
+import empleados.Tecnicos;
+import empleados.Vendedor;
 
 /**
  *
@@ -21,6 +21,10 @@ public class DialogoEmpleado extends javax.swing.JDialog {
 
     /**
      * Creates new form DialogoEmpleado
+     *
+     * @param parent
+     * @param modal
+     * @param empleado
      */
     public DialogoEmpleado(java.awt.Frame parent, boolean modal, Empleado empleado) {
         super(parent, modal);
@@ -98,14 +102,13 @@ public class DialogoEmpleado extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos empleado");
-        setPreferredSize(new java.awt.Dimension(600, 300));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panel_tecnologias.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista de tecnologías"));
         panel_tecnologias.setMaximumSize(new java.awt.Dimension(175, 32767));
         panel_tecnologias.setMinimumSize(new java.awt.Dimension(175, 39));
         panel_tecnologias.setPreferredSize(new java.awt.Dimension(175, 4));
-        panel_tecnologias.setLayout(new java.awt.GridLayout());
+        panel_tecnologias.setLayout(new java.awt.GridLayout(1, 0));
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
 

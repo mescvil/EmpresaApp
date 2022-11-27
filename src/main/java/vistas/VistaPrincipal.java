@@ -1,10 +1,10 @@
 /*
  */
-package interfaz;
+package vistas;
 
 import accesoDatos.EmpleadosDB;
-import static interfaz.Dialogs.creaDialogError;
-import static interfaz.Dialogs.creaDialogWarning;
+import static vistas.Dialogs.creaDialogError;
+import static vistas.Dialogs.creaDialogWarning;
 import clases.Oficina;
 import controlador.Controlador;
 import excepciones.CargaDatosException;
@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
-import personas.Empleado;
-import personas.TipoEmpleados;
+import empleados.Empleado;
+import empleados.TipoEmpleados;
 
 /**
  * @author Escoz
@@ -142,7 +142,7 @@ public class VistaPrincipal extends JFrame {
         setPreferredSize(new java.awt.Dimension(900, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        tabla_empleados.setModel(modeloTablaEmpleadosSueldo = new interfaz.ModeloTablaEmpleadosSueldo());
+        tabla_empleados.setModel(modeloTablaEmpleadosSueldo = new vistas.ModeloTablaEmpleadosSueldo());
         tabla_empleados.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tabla_empleados.getTableHeader().setReorderingAllowed(false);
         modeloTablaEmpleadosSimple = new ModeloTablaEmpleadosSimple();

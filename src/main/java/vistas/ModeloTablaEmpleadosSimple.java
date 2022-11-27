@@ -1,8 +1,8 @@
-package interfaz;
+package vistas;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import personas.Empleado;
+import empleados.Empleado;
 
 /**
  * @author Escoz

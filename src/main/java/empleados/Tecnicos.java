@@ -1,4 +1,4 @@
-package personas;
+package empleados;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
