@@ -48,7 +48,19 @@ public class Administrativo extends NoTecnicos {
 
     @Override
     public float calculaSueldo(int mes) {
-        return super.calculaSueldo(mes) + 100;
+        float sueldo_base = super.calculaSueldo(mes);
+
+        switch (nivel_ofimatica) {
+            case Bajo ->
+                sueldo_base += 0;
+            case Medio ->
+                sueldo_base += 40;
+            case Alto ->
+                sueldo_base += 80;
+            case Avanzado ->
+                sueldo_base += 120;
+        }
+        return sueldo_base;
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------

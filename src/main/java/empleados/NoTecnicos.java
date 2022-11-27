@@ -41,7 +41,7 @@ public abstract class NoTecnicos extends Empleado {
 
     @Override
     public float calculaSueldo(int mes) {
-        return super.calculaSueldo(mes);
+        return super.calculaSueldo(mes) + 100;
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------

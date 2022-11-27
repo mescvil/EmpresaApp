@@ -46,7 +46,8 @@ public class Vendedor extends NoTecnicos {
 
     @Override
     public float calculaSueldo(int mes) {
-        return super.calculaSueldo(mes);
+        float sueldo_base = super.calculaSueldo(mes);
+        return (zona % 2 == 0) ? sueldo_base + 100 : sueldo_base + 200;
     }
 
     // ----------------------------- GETTERS & SETTERS -----------------------------
