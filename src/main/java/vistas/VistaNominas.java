@@ -339,6 +339,10 @@ public class VistaNominas extends JFrame {
         Empleado empleado;
 
         if (isModeloSueldo) {
+            /* Evitamos que seleccione la fila de la sumatoria */
+            if (fila_actual == tabla_empleados.getRowCount() - 1) {
+                return;
+            }
             empleado = ((ModeloTablaEmpleadosSueldo) tabla_empleados.getModel()).getEmpleado(fila_actual);
         } else {
             empleado = ((ModeloTablaEmpleadosSimple) tabla_empleados.getModel()).getEmpleado(fila_actual);
